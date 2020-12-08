@@ -1,0 +1,28 @@
+﻿@model DespViagem.UI.ViewModels.ViagemViewModel
+@{
+    ViewData["Title"] = "Adicionar Despesa";
+}
+
+<div class="modal-header modalHeader01">
+     <h4 class="modal-title">@ViewData["Title"]</h4>
+     <button type="button" class="close" data-dismiss="modal">
+         <span aria-hidden="true" class="closeText">×</span><span class="sr-only">Fechar</span>
+     </button>
+</div>
+
+<form asp-action="AdicionarDespesa">
+    <div class="modal-body">
+
+        <input type="hidden" asp-for="Despesa.ViagemId" />
+        <input type="hidden" asp-for="Despesa.Id" />
+
+        <partial name="_Despesa" />
+
+        <div class="modal-footer">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Adicionar Despesa" class="btn btn-success" />
+                <input type="button" class="btn btn-info" value="Fechar" data-dismiss="modal" />
+            </div>
+        </div>
+    </div>
+</form>

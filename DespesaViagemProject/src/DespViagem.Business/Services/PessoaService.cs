@@ -1,6 +1,6 @@
 ﻿using DespViagem.Business.Interfaces;
 using DespViagem.Business.Models;
-using DespViagem.Business.Models.Validations;
+using DespViagem.Business.Validations;
 using System;
 using System.Collections.Generic;
 using System.Linq;

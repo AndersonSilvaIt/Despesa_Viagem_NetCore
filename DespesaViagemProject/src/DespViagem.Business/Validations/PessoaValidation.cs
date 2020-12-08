@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using DespViagem.Business.Models;
+using FluentValidation;
 
-namespace DespViagem.Business.Models.Validations
+namespace DespViagem.Business.Validations
 {
 	public class PessoaValidation : AbstractValidator<Pessoa>
 	{
@@ -16,10 +17,10 @@ namespace DespViagem.Business.Models.Validations
 			//	.Length(2, 100)
 			//	.WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MatLength} caracteres.");
 
-			RuleFor(p => p.Documento.Length).Equal(ValidacaoCPF.TamanhoCpf)
+			RuleFor(p => p.Documento.Length).Equal(CpfValidacao.TamanhoCpf)
 						.WithMessage("O campo Documento precisa ter {ComparisonValue} caracteres e foi fornecido {PropertyValue}.");
 
-			RuleFor(p => ValidacaoCPF.Validar(p.Documento)).Equal(true)
+			RuleFor(p => CpfValidacao.Validar(p.Documento)).Equal(true)
 						.WithMessage("O Documento fornecido é inválido.");
 
 			//RuleFor(p => p.DataNascimento)

@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using DespViagem.UI.Configuration;
+using AutoMapper;
 
 namespace DespViagem.UI
 {
@@ -20,6 +20,8 @@ namespace DespViagem.UI
 		{
 			services.AddIdentityConfiguration(Configuration);
 			services.AddMvcConfiguration(Configuration);
+
+			services.AddAutoMapper(typeof(Startup));
 
 			services.RegisterServices(Configuration);
 		}

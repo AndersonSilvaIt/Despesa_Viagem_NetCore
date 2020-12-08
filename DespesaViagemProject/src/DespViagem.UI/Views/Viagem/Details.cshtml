@@ -1,0 +1,40 @@
+﻿
+@model DespViagem.UI.ViewModels.ViagemViewModel
+
+@{
+    ViewData["Title"] = "Detalhes";
+}
+
+<div>
+    <h4>Informação somente leitura</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cliente)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cliente)
+        </dd>
+    </dl>
+</div>
+
+<partial name="_DetalhesEndereco" />
+<hr />
+
+<hr />
+<h4>Despesas</h4>
+<div>
+    <partial name="_ListaDespesas" model="@Model.Despesas" />
+</div>
+
+<div>
+    <a class="btn btn-dark" asp-action="Edit" asp-route-id="@Model.Id">Editar</a>
+    <a class="btn btn-info" asp-action="Index">Voltar</a>
+</div>

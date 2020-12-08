@@ -49,6 +49,7 @@ namespace DespViagem.UI.Configuration
 			app.UseHsts();
 
 			app.UseHttpsRedirection();
+
 			app.UseStaticFiles();
 
 			app.UseRouting();

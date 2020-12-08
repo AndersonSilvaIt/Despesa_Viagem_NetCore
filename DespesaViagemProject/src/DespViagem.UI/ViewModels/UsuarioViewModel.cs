@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using DespViagem.UI.Extensions;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace DespViagem.UI.Models
+namespace DespViagem.UI.ViewModels
 {
 	public class UsuarioRegistro
 	{
@@ -12,7 +13,7 @@ namespace DespViagem.UI.Models
 
 		[Required(ErrorMessage = "O campo {0} é obrigatório")]
 		[DisplayName("CPF")]
-		//[Cpf]
+		[Cpf]
 		public string CPF { get; set; }
 
 		[DisplayName("E-mail")]

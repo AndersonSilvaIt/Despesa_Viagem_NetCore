@@ -1,0 +1,86 @@
+﻿@model DespViagem.UI.ViewModels.ViagemViewModel
+
+@{
+    ViewData["Title"] = "Nova Viagem";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="border-form">
+    <form asp-action="Create">
+
+        <vc:summary></vc:summary>
+        <div class="container">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Descricao" class="control-label"></label>
+                    <input asp-for="Descricao" class="form-control" />
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Cliente" class="control-label"></label>
+                    <input asp-for="Cliente" class="form-control" />
+                    <span asp-validation-for="Cliente" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="headerList">Endereço</h4>
+        <hr />
+
+        <partial name="_Endereco" />
+
+        <hr />
+        <h4 class="headerList">Despesas</h4>
+
+        <a supress-by-action="AdicionarDespesa, Create02" asp-action="AdicionarDespesa" class="btn btnAdd" data-modal="">
+            Nova Despesa
+        </a>
+
+        <div id="DespesaTarget">
+            @if (Model != null && Model.Despesas != null)
+            {
+                <partial name="_ListaDespesa" model="@Model.Despesas" />
+            }
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Cadastrar" class="btn btn-primary" />
+            <a class="btn btn-success" asp-action="Index">Voltar</a>
+        </div>
+
+    </form>
+
+
+
+    <hr />
+@*    <div class="form-group">
+        <input type="submit" value="Cadastrar" class="btn btn-primary" />
+        <a class="btn btn-success" asp-action="Index">Voltar</a>
+    </div>
+
+    *@
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        BuscaCEP();
+
+        $(document).ready(function () {
+            AjaxModal('DespesaTarget');
+        });
+
+    </script>
+}
+
+@section Styles {
+
+    <style type="text/css">
+
+        .modal-dialog {
+            max-width: 80%;
+        }
+    </style>
+}

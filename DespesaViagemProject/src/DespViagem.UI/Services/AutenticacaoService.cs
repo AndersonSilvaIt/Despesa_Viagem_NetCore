@@ -1,4 +1,4 @@
-﻿using DespViagem.UI.Models;
+﻿using DespViagem.UI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
@@ -42,8 +42,6 @@ namespace DespViagem.UI.Services
 				Email = usuarioRegistro.Email,
 				EmailConfirmed = true
 			};
-
-
 
 			var result = await _userManager.CreateAsync(user, usuarioRegistro.Senha);
 			return result;

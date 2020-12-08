@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DespViagem.Business.Interfaces;
 using DespViagem.Business.Models;
 using DespViagem.Business.Models.DomainObjects;
-using DespViagem.UI.Models;
+using DespViagem.UI.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -111,16 +111,18 @@ namespace DespViagem.UI.Controllers
 
 			//await RealizarLogin(resposta);
 
-			return RedirectToAction("Inicial", "Despesa");
+			return RedirectToAction("Inicial", "Viagem");
 		}
 
 		[HttpGet]
 		[Route("sair")]
 		public async Task<IActionResult> Logout()
 		{
-			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+			await _signInManager.SignOutAsync();
 
-			return RedirectToAction("Index", "Catalogo");
+			//await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+			return RedirectToAction("Index", "Home");
 		}
 
 		private async Task RealizarLogin(UsuarioRespostaLogin resposta)

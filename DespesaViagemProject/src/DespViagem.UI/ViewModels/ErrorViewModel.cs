@@ -1,6 +1,6 @@
 using System;
 
-namespace DespViagem.UI.Models
+namespace DespViagem.UI.ViewModels
 {
 	public class ErrorViewModel
 	{

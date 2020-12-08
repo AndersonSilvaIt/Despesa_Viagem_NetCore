@@ -19,6 +19,75 @@ namespace DespViagem.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DespViagem.Business.Models.Despesa", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataDespesa")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Local")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Observacao")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ViagemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ViagemId");
+
+                    b.ToTable("Despesas");
+                });
+
+            modelBuilder.Entity("DespViagem.Business.Models.Endereco", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Bairro")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Cep")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Cidade")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Complemento")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Logradouro")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Numero")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<Guid>("ViagemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ViagemId")
+                        .IsUnique();
+
+                    b.ToTable("Enderecos");
+                });
+
             modelBuilder.Entity("DespViagem.Business.Models.Pessoa", b =>
                 {
                     b.Property<Guid>("Id")
@@ -37,6 +106,41 @@ namespace DespViagem.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Pessoas");
+                });
+
+            modelBuilder.Entity("DespViagem.Business.Models.Viagem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Cliente")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Viagens");
+                });
+
+            modelBuilder.Entity("DespViagem.Business.Models.Despesa", b =>
+                {
+                    b.HasOne("DespViagem.Business.Models.Viagem", "Viagem")
+                        .WithMany("Despesas")
+                        .HasForeignKey("ViagemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DespViagem.Business.Models.Endereco", b =>
+                {
+                    b.HasOne("DespViagem.Business.Models.Viagem", "Viagem")
+                        .WithOne("Endereco")
+                        .HasForeignKey("DespViagem.Business.Models.Endereco", "ViagemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

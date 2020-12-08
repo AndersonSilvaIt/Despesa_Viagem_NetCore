@@ -15,9 +15,14 @@ namespace DespViagem.UI.Configuration
 		{
 			services.AddSingleton<IValidationAttributeAdapterProvider, CpfValidationAttributeAdapterProvider>();
 			services.AddScoped<INotificador, Notificador>();
-			services.AddScoped<IPessoaService, PessoaService>();
+
+			services.AddScoped<IViagemRepository, ViagemRepository>();
 			services.AddScoped<IPessoaRepository, PessoaRepository>();
-			//services.AddHttpClient<IAutenticacaoService, AutenticacaoService>();
+			services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+
+			services.AddScoped<IPessoaService, PessoaService>();
+			services.AddScoped<IViagemService, ViagemService>();
+
 		}
 	}
 }

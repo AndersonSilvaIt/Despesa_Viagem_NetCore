@@ -2,70 +2,127 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+/*
+input,
+select, file,
+textarea {
+    max-width: 400px;
+}
+*/
+textarea {
+    resize: none;
+}
+
+.modalHeader01 {
+    background-image: linear-gradient(to right, #0e1358, #000986, #000986, #000986, #0e1358);
+    box-shadow: 2px 2px 15px #0e1358;
+    cursor: pointer;
+    font: normal 20px 'Bahnschrift', Segoe UI, Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: #fff;
+}
+
+.border-form {
+    border: 2px solid #000986;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 15px #0e1358;
+}
+
+.closeText {
+    font: normal 20px 'Bahnschrift', Segoe UI, Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: #fff;
+}
+
+/*input, textarea, label {
+    font: normal 20px 'Bahnschrift', Segoe UI, Verdana, Arial, Helvetica, sans-serif;
+}*/
+
+.btnAdd {
+    background-color: #0009FF;
+}
+
+a.btn, button.btn {
+    color: #fff;
+}
+
+.headerList {
+    text-align: center;
+    /* background-image: linear-gradient(to right, #0009FF, #0063FF, #0063FF, #0063FF, #0009FF);*/
+    background-color: rgba(0,9,134,0.1);
+    cursor: pointer;
+    /*font: normal 20px 'Bahnschrift', Segoe UI, Verdana, Arial, Helvetica, sans-serif;*/
+    color: #000;
 }

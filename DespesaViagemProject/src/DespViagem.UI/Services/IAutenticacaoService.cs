@@ -1,4 +1,4 @@
-﻿using DespViagem.UI.Models;
+﻿using DespViagem.UI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 

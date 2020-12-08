@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DespViagem.UI.Models;
+using DespViagem.UI.ViewModels;
 
 namespace DespViagem.UI.Controllers
 {

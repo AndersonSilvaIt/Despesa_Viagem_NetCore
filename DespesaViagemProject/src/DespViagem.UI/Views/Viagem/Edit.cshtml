@@ -1,0 +1,49 @@
+﻿@model DespViagem.UI.ViewModels.ViagemViewModel
+
+@{
+    ViewData["Title"] = "Editar Viagem";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+
+<form asp-action="Edit">
+    <vc:summary></vc:summary>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+
+            <label asp-for="Descricao"></label>
+            <input asp-for="Descricao" class="form-control" />
+            <span asp-validation-for="Descricao" class="text-danger"></span>
+
+            <label asp-for="Cliente"></label>
+            <input asp-for="Cliente" class="form-control" />
+            <span asp-validation-for="Cliente" class="text-danger"></span>
+
+        </div>
+
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Salvar" class="btn btn-primary" />
+    </div>
+</form>
+
+<div id="EnderecoTarget">
+    <partial name="_DetalhesEndereco" />
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            AjaxModal('EnderecoTarget');
+        });
+    </script>
+
+}

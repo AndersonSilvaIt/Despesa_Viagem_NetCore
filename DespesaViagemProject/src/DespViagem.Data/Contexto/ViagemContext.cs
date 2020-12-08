@@ -9,6 +9,9 @@ namespace DespViagem.Data.Contexto
 		public ViagemContext(DbContextOptions options) : base(options)
 		{ }
 		public DbSet<Pessoa> Pessoas { get; set; }
+		public DbSet<Viagem> Viagens { get; set; }
+		public DbSet<Endereco> Enderecos { get; set; }
+		public DbSet<Despesa> Despesas { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
