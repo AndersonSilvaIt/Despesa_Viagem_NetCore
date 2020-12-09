@@ -23,6 +23,13 @@ namespace DespViagem.Data.Contexto
 				property.SetColumnType("varchar(200)");
 			}
 
+			foreach (var property in modelBuilder.Model.GetEntityTypes()
+								.SelectMany(e => e.GetProperties()
+								.Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?))))
+			{
+				property.SetColumnType("decimal(18,2)");
+			}
+
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(ViagemContext).Assembly);
 
 			base.OnModelCreating(modelBuilder);

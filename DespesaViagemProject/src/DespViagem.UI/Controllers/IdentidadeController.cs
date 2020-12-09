@@ -111,7 +111,7 @@ namespace DespViagem.UI.Controllers
 
 			//await RealizarLogin(resposta);
 
-			return RedirectToAction("Inicial", "Viagem");
+			return RedirectToAction("Index", "Viagem");
 		}
 
 		[HttpGet]

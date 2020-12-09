@@ -1,5 +1,5 @@
 ﻿function AjaxModal(target) {
-
+	alert(target);
 	$(document).ready(function () {
 		$(function () {
 			$.ajaxSetup({ cache: false });

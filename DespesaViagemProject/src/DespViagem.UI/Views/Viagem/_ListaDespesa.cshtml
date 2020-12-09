@@ -1,53 +1,58 @@
 ﻿@model IEnumerable<DespViagem.UI.ViewModels.DespesaViewModel>
 
 @{
+    <br />
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr>
-                <th>
-                </th>
-                <th>Descrição</th>
-                <th>
-                    Local
-                </th>
-                <th>
-                    Valor
-                </th>
-                <th>
-                    Data Cadastro
-                </th>
+                <th> Descrição</th>
+                <th> Local </th>
+                <th> Valor </th>
+                <th> Data Despesa </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Descricao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Local)
-                </td>
-                <td>
-                    @item.Valor.ToString("C")
-                </td>
+                <tr>
+                    <td> @Html.DisplayFor(modelItem => item.Descricao) </td>
+                    <td> @Html.DisplayFor(modelItem => item.Local) </td>
+                    <td> @item.Valor.ToString("C") </td>
+                    <td> @item.DataCadastro.ToString("dd/MM/yyyy HH:mm:ss") </td>
 
-                <td>
-                    <a supress-by-action="Edit, ObterDespesa" asp-action="AtualizarDespesa" asp-route-id="@item.Id" class="btn btn-info" data-modal="">
-                        <!-- o asp-route-id é o parâmetro que preciso passar, como na controller o parametro chama-se "id", então aqui precisa ser asp-route-id -->
-                        <span title="Editar" class="fa fa-pencil-alt"></span>
-                    </a>
-                </td>
-                @*
-        <td class="text-right">
+                    <td>
+                        <a supress-by-action="AtualizarDespesa, ObterDespesa" asp-action="AtualizarDespesa" asp-route-id="@item.Id" class="btn btn-info" data-modal="">
+                            <span title="Editar" class="fa fa-pencil-alt"></span>
+                        </a>
+                    </td>
 
-            <a class="btn btn-info" asp-controller="Produtos" asp-action="Details" asp-route-id="@item.Id"><span class="fa fa-search"></span></a>
-            <a class="btn btn-warning" asp-controller="Produtos" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-pencil-alt"></span></a>
-            <a class="btn btn-danger" asp-controller="Produtos" asp-action="Delete" asp-route-id="@item.Id"><span class="fa fa-trash"></span></a>
-        </td>**@
-            </tr>
-			}
+                </tr>
+            }
+
         </tbody>
     </table>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+       
+		$(document).ready(function () {
+			alert('Passou02');
+            AjaxModal('DespesaTarget');
+        });
+
+    </script>
+}
+
+@section Styles {
+
+    <style type="text/css">
+
+        .modal-dialog {
+            max-width: 80%;
+        }
+    </style>
 }

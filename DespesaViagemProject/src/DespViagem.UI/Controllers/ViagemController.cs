@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DespViagem.UI.Controllers
@@ -13,12 +15,10 @@ namespace DespViagem.UI.Controllers
     [Authorize]
     public class ViagemController : BaseController
     {
-        private static ViagemViewModel _viagemViewModel;
-
         private readonly IViagemRepository _viagemRepository;
         private readonly IViagemService _viagemService;
         private readonly IMapper _mapper;
-        
+
         public ViagemController(IViagemRepository viagemRepository,
                                IMapper mapper,
                                IViagemService viagemService, INotificador notificador) : base(notificador)
@@ -29,7 +29,7 @@ namespace DespViagem.UI.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> Inicial()
+        public async Task<IActionResult> Index()
         {
             var viagens = _mapper.Map<IEnumerable<ViagemViewModel>>(await _viagemRepository.ObterTodos());
 
@@ -40,7 +40,7 @@ namespace DespViagem.UI.Controllers
         [Route("dados-da-viagem/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
-            var viagemViewModel = await ObterViagemEndereco(id);
+            var viagemViewModel = await ObterViagemDespesaEndereco(id);
 
             if (viagemViewModel == null)
             {
@@ -65,6 +65,8 @@ namespace DespViagem.UI.Controllers
         public async Task<IActionResult> Create(ViagemViewModel viagemViewModel)
         {
             if (!ModelState.IsValid) return View(viagemViewModel);
+
+            viagemViewModel.Despesas = TratarCacheListaDespesa();
 
             var viagem = _mapper.Map<Viagem>(viagemViewModel);
             await _viagemService.Adicionar(viagem);
@@ -100,7 +102,7 @@ namespace DespViagem.UI.Controllers
             var fornecedor = _mapper.Map<Viagem>(fornecedorViewModel);
             await _viagemService.Atualizar(fornecedor);
 
-            if (!OperacaoValida()) return View(await ObterViagemEndereco(id));
+            if (!OperacaoValida()) return View(await ObterViagemDespesaEndereco(id));
 
             return RedirectToAction("Index");
         }
@@ -182,7 +184,9 @@ namespace DespViagem.UI.Controllers
         //[Route("atualizar-endereco-fornecedor/{id:guid}")]
         public IActionResult AdicionarDespesa()
         {
-            return PartialView("_AdicionarDespesa", new ViagemViewModel());
+            var result = new ViagemViewModel() { Despesa = new DespesaViewModel() };
+
+            return PartialView("_AdicionarDespesa", result);
         }
 
         //[ClaimsAuthorize("Fornecedor", "Atualizar")]
@@ -191,14 +195,13 @@ namespace DespViagem.UI.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> AdicionarDespesa(ViagemViewModel viagemViewModel)
         {
-            ////HttpContext.Request.Form.Files
             ModelState.Remove("Cliente");
             ModelState.Remove("Descricao");
             ModelState.Remove("Id");
             ModelState.Remove("ViagemId");
             ModelState.Remove("Despesa.Id");
             ModelState.Remove("Despesa.ViagemId");
-            //Despesa.Id
+
             if (!ModelState.IsValid)
                 return PartialView("_AdicionarDespesa", viagemViewModel);
 
@@ -207,38 +210,95 @@ namespace DespViagem.UI.Controllers
             if (!OperacaoValida())
                 return PartialView("_AdicionarDespesa", viagemViewModel);
 
-            DespesaViewModel newDespesa = viagemViewModel.Despesa;
-            if (_viagemViewModel == null)
-            {
-                _viagemViewModel = new ViagemViewModel();
-                _viagemViewModel.Despesas = new List<DespesaViewModel>();
-            }
-            _viagemViewModel.Despesas.Add(newDespesa);
+            viagemViewModel.Despesas = TratarCacheListaDespesa();
 
-            _viagemViewModel.Despesa = new DespesaViewModel();
-            viagemViewModel.Despesa = new DespesaViewModel();
+            viagemViewModel.Despesas.Add(viagemViewModel.Despesa);
+
+            TratarCacheListaDespesa(viagemViewModel.Despesas);
+
+            TratarCacheViagemViewModel(viagemViewModel);
 
             var url = Url.Action("ObterDespesas", "Viagem");
             return Json(new { success = true, url });
         }
 
-        //[ClaimsAuthorize("viagem", "Adicionar")]
-        //[Route("nova-viagem-02")]
-        public async Task<IActionResult> ObterDespesas()
+        [HttpGet()]
+        public IActionResult AtualizarDespesa(Guid Id)
         {
-            var viagem = new ViagemViewModel();
+            List<DespesaViewModel> listaDespesa = TratarCacheListaDespesa();
 
-            return PartialView("_ListaDespesa", _viagemViewModel.Despesas);
+            DespesaViewModel despesaAtualizar = listaDespesa.First(x => x.Id == Id);
+
+            var result = new ViagemViewModel() { Despesa = despesaAtualizar };
+
+            return PartialView("_AdicionarDespesa", result);
         }
 
+        //[ClaimsAuthorize("viagem", "Adicionar")]
+        //[Route("nova-viagem-02")]
+        public IActionResult ObterDespesas()
+        {
+            var lista = TratarCacheListaDespesa();
+
+            return PartialView("_ListaDespesa", lista);
+        }
         private async Task<ViagemViewModel> ObterViagemEndereco(Guid id)
         {
             return _mapper.Map<ViagemViewModel>(await _viagemRepository.ObterViagemEndereco(id));
         }
-
         private async Task<ViagemViewModel> ObterViagemDespesaEndereco(Guid id)
         {
             return _mapper.Map<ViagemViewModel>(await _viagemRepository.ObterViagemEnderecoDespesa(id));
+        }
+
+        private List<DespesaViewModel> TratarCacheListaDespesa(List<DespesaViewModel> listaDespesaCache = null)
+        {
+            List<DespesaViewModel> listaDespesa = new List<DespesaViewModel>();
+            try
+            {
+                if(listaDespesaCache != null)
+                {
+                    var serialize = JsonSerializer.Serialize(listaDespesaCache, null);
+
+                    TempData["DespesasViagem"] = serialize;
+                    listaDespesa = listaDespesaCache;
+                }
+                else if (TempData["DespesasViagem"] != null)
+                {
+                    listaDespesa = JsonSerializer.Deserialize<List<DespesaViewModel>>(TempData["DespesasViagem"].ToString(), null);
+
+                    var serialize = JsonSerializer.Serialize(listaDespesa, null);
+                    TempData["DespesasViagem"] = serialize;
+                }
+            }
+            catch (Exception ex) { }
+
+            return listaDespesa;
+        }
+
+        private ViagemViewModel TratarCacheViagemViewModel(ViagemViewModel viagemCache = null)
+        {
+            ViagemViewModel viagem = new ViagemViewModel();
+            try
+            {
+                if (viagem != null)
+                {
+                    var serialize = JsonSerializer.Serialize(viagem, null);
+
+                    TempData["ViagemCache"] = serialize;
+                    viagem = viagemCache;
+                }
+                else if (TempData["DespesasViagem"] != null)
+                {
+                    viagem = JsonSerializer.Deserialize<ViagemViewModel>(TempData["ViagemCache"].ToString(), null);
+
+                    var serialize = JsonSerializer.Serialize(viagem, null);
+                    TempData["DespesasViagem"] = serialize;
+                }
+            }
+            catch (Exception ex) { }
+
+            return viagem;
         }
 
     }

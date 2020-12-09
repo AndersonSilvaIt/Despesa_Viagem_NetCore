@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DespViagem.Business.Models
 {
 	public class Endereco : Entity
 	{
-		public Guid ViagemId { get; set; }
 		public string Logradouro { get; set; }
 		public string Numero { get; set; }
 		public string Complemento { get; set; }
@@ -15,6 +12,8 @@ namespace DespViagem.Business.Models
 
 		public string Cidade { get; set; }
 		public string Estado { get; set; }
+
+		public Guid ViagemId { get; set; }
 
 		/*ER Relation*/
 		public Viagem Viagem { get; set; }

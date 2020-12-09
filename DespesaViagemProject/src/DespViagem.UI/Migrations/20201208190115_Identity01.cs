@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DespViagem.UI.Migrations
 {
-    public partial class Inicial01 : Migration
+    public partial class Identity01 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

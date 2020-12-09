@@ -21,7 +21,6 @@ namespace DespViagem.Business.Services
 
 		public async Task Adicionar(Viagem viagem)
 		{
-
 			if (!ExecutarValidacao(new ViagemValidation(), viagem)
 				|| !ExecutarValidacao(new EnderecoValidation(), viagem.Endereco)) return;
 
@@ -47,9 +46,7 @@ namespace DespViagem.Business.Services
 			var endereco = await _enderecoRepository.ObterEnderecoPorViagem(id);
 
 			if (endereco != null)
-			{
 				await _enderecoRepository.Remover(endereco.Id);
-			}
 
 			await _viagemRepository.Remover(id);
 		}

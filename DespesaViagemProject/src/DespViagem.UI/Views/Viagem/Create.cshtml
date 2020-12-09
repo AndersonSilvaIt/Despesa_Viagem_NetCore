@@ -34,10 +34,11 @@
         <hr />
         <h4 class="headerList">Despesas</h4>
 
-        <a supress-by-action="AdicionarDespesa, Create02" asp-action="AdicionarDespesa" class="btn btnAdd" data-modal="">
+        <a id="btnAdicionarDespesa" supress-by-action="AdicionarDespesa, Create02" asp-action="AdicionarDespesa" class="btn btnAdd" data-modal="">
             Nova Despesa
         </a>
-
+        <br />
+        <br />
         <div id="DespesaTarget">
             @if (Model != null && Model.Despesas != null)
             {
@@ -45,14 +46,14 @@
             }
         </div>
 
+        <br />
+
         <div class="form-group">
             <input type="submit" value="Cadastrar" class="btn btn-primary" />
             <a class="btn btn-success" asp-action="Index">Voltar</a>
         </div>
 
     </form>
-
-
 
     <hr />
 @*    <div class="form-group">
@@ -66,7 +67,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        BuscaCEP();
+		BuscaCEP();
 
         $(document).ready(function () {
             AjaxModal('DespesaTarget');

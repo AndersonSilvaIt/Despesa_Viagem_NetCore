@@ -29,13 +29,15 @@ namespace DespViagem.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
+                        .IsRequired()
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("Local")
+                        .IsRequired()
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("Observacao")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
@@ -47,7 +49,7 @@ namespace DespViagem.Data.Migrations
 
                     b.HasIndex("ViagemId");
 
-                    b.ToTable("Despesas");
+                    b.ToTable("Despesa");
                 });
 
             modelBuilder.Entity("DespViagem.Business.Models.Endereco", b =>
@@ -57,25 +59,30 @@ namespace DespViagem.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Bairro")
-                        .HasColumnType("varchar(200)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Cep")
-                        .HasColumnType("varchar(200)");
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("Cidade")
-                        .HasColumnType("varchar(200)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Complemento")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("varchar(200)");
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Logradouro")
+                        .IsRequired()
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("Numero")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<Guid>("ViagemId")
                         .HasColumnType("uniqueidentifier");
@@ -95,12 +102,14 @@ namespace DespViagem.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Documento")
-                        .HasColumnType("varchar(200)");
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
 
                     b.Property<int>("Idade")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
@@ -115,14 +124,15 @@ namespace DespViagem.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Cliente")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar(200)");
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Viagens");
+                    b.ToTable("Viagem");
                 });
 
             modelBuilder.Entity("DespViagem.Business.Models.Despesa", b =>
