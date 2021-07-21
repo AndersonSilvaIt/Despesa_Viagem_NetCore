@@ -9,6 +9,7 @@
 <hr />
 <div class="border-form">
     <form asp-action="Create">
+        <input type="hidden" id="hiddenListDespesa" asp-for="JsonList" />
 
         <vc:summary></vc:summary>
         <div class="container">
@@ -34,16 +35,16 @@
         <hr />
         <h4 class="headerList">Despesas</h4>
 
-        <a id="btnAdicionarDespesa" supress-by-action="AdicionarDespesa, Create02" asp-action="AdicionarDespesa" class="btn btnAdd" data-modal="">
+        <a supress-by-action="AdicionarDespesa, Create02" asp-action="AdicionarDespesa" class="btn btnAdd" data-modal="">
             Nova Despesa
         </a>
         <br />
         <br />
         <div id="DespesaTarget">
-            @if (Model != null && Model.Despesas != null)
+            <!--@if (Model != null && Model.Despesas != null)
             {
                 <partial name="_ListaDespesa" model="@Model.Despesas" />
-            }
+            }-->
         </div>
 
         <br />
@@ -56,10 +57,10 @@
     </form>
 
     <hr />
-@*    <div class="form-group">
-        <input type="submit" value="Cadastrar" class="btn btn-primary" />
-        <a class="btn btn-success" asp-action="Index">Voltar</a>
-    </div>
+    @*    <div class="form-group">
+            <input type="submit" value="Cadastrar" class="btn btn-primary" />
+            <a class="btn btn-success" asp-action="Index">Voltar</a>
+        </div>
 
     *@
 </div>
@@ -67,11 +68,232 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-		BuscaCEP();
+        BuscaCEP();
+        var dataReturn;
 
         $(document).ready(function () {
-            AjaxModal('DespesaTarget');
+
+            $(function () {
+                $.ajaxSetup({ cache: false });
+
+                $("a[data-modal]").on("click",
+                    function (e) {
+
+                        //alert(this.href);
+                        $('#myModalContent').load(this.href,
+                            function () {
+                                $('#myModal').modal({
+                                    keyboard: true
+                                },
+                                    'show');
+                                bindForm(this);
+                                var element = $('#hiddenListDespesa');
+                                if (element != undefined && element != null) {
+                                    $('#hiddenListDespesa02').val(element.val());
+                                }
+                            });
+                        return false;
+                    });
+            });
+
+            function bindForm(dialog) {
+
+                $('form', dialog).submit(function () {
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: $(this).serialize(),
+                        success: function (result) {
+                            if (result.success) {
+                                $('#myModal').modal('hide');
+
+                                //if (result.url != null && result.url != undefined && result.url.length > 0)
+                                //    $('#DespesaTarget').load(result.url); // Carrega o resultado HTML para a div demarcada
+
+                                PopularListaDespesa(result.data);
+                            } else {
+                                $('#myModalContent').html(result);
+                                bindForm(dialog);
+                            }
+                        }
+                    });
+                    return false;
+                });
+            }
         });
+
+        function PopularListaDespesa(data) {
+            lista = JSON.parse(data);
+            //alert('Retorno do adicionar 01');
+            //alert(lista.length);
+            $('#hiddenListDespesa').val(data);
+
+            const elementList = document.getElementById('DespesaTarget');
+
+            while (elementList.firstChild) {
+                elementList.firstChild.remove()
+            }
+
+            var table = document.createElement('table');
+            table.classList.add('table'); table.classList.add('table-hover');
+
+            var thead = document.createElement('thead'); thead.classList.add('thead-dark')
+
+            var tr = document.createElement('tr');
+
+            //Headers
+            var thDesc = document.createElement('th'); thDesc.innerHTML = 'Descrição'
+            var thLocal = document.createElement('th'); thLocal.innerHTML = 'Local'
+            var tdValor = document.createElement('th'); tdValor.innerHTML = 'Valor'
+            var tdDataDespesa = document.createElement('th'); tdDataDespesa.innerHTML = 'Data Despesa'
+
+            tr.appendChild(thDesc); tr.appendChild(thLocal);
+            tr.appendChild(tdValor); tr.appendChild(tdDataDespesa);
+            thead.appendChild(tr);
+            table.appendChild(thead);
+
+            var tbody = document.createElement('tbody');
+            var trBody = document.createElement('tr');
+            var tdBody = document.createElement('td');
+
+            var linkA = document.createElement('a');
+            var spanLink = document.createElement('span');
+
+            for (var i = 0; i < lista.length; i++) {
+
+                tdBody.innerHTML = lista[i].Descricao;
+                trBody.appendChild(tdBody);
+
+                tdBody = document.createElement('td');
+                tdBody.innerHTML = lista[i].Local;
+                trBody.appendChild(tdBody);
+
+                tdBody = document.createElement('td');
+                tdBody.innerHTML = lista[i].Valor;
+                trBody.appendChild(tdBody);
+
+
+                tdBody = document.createElement('td');
+
+                tdBody.innerHTML = GetFulltDate(lista[i].DataCadastro);
+                
+                trBody.appendChild(tdBody);
+
+                tdBody = document.createElement('td');
+                linkA.setAttribute('data-id', lista[i].Id);
+
+                linkA.classList.add('btn');
+                linkA.classList.add('btn-info');
+
+                spanLink.setAttribute('Title', 'Editar');
+                spanLink.classList.add('fa');
+                spanLink.classList.add('fa-pencil-alt');
+                linkA.appendChild(spanLink);
+
+                linkA.addEventListener('click', function () {
+
+                    var hiddenValue = $('#hiddenListDespesa').val();
+                    var lista02 = JSON.parse(hiddenValue);
+                    var dataId = $(this).data("id");
+                    var index = lista02.findIndex(x => x.Id === dataId);
+                    var result = lista02[index];
+                    var object = { 'id': result.Id, 'Descricao': result.Descricao };
+
+                    //console.log('Object');
+                    //console.log(object)
+
+                    var request = $.ajax({
+                        url: "/Viagem/AtualizarDespesaGet",
+                        method: "GET",
+                        data: object,
+                        dataType: "html"
+
+                    }).done(function (res) {
+
+                        //alert(res);
+
+                        console.log(res);
+                        $('#myModalContent').html(res);
+                        $('#myModal').modal({ keyboard: true }, 'show');
+
+                        $('form', '#myModalContent').submit(function () {
+                            $.ajax({
+                                url: this.action,
+                                type: this.method,
+                                data: $(this).serialize(),
+                                success: function (result) {
+                                    if (result.success) {
+                                        $('#myModal').modal('hide');
+
+                                   //     if (result.url != null && result.url != undefined && result.url.length > 0)
+                                   //         $('#DespesaTarget').load(result.url); // Carrega o resultado HTML para a div demarcada
+
+                                        PopularListaDespesa(result.data);
+                                    } else {
+                                        $('#myModalContent').html(result);
+                                        bindForm(dialog);
+                                    }
+                                }
+                            });
+                            return false;
+                        });
+
+
+                        return false;
+
+                    }).fail(function (jqXHR, textStatus) {
+                        alert("Request failed: " + textStatus);
+                    });
+                });
+
+                tdBody.appendChild(linkA);
+                trBody.appendChild(tdBody);
+
+                tbody.appendChild(trBody);
+                trBody = document.createElement('tr');
+                linkA = document.createElement('a');
+                spanLink = document.createElement('span');
+                tdBody = document.createElement('td');
+            }
+
+            table.appendChild(tbody);
+
+            //Preenchimento da tabela
+
+            elementList.appendChild(table);
+        }
+
+        function GetFulltDate(dateString) {
+
+            console.log(dateString);
+
+            //2020-08-14T15:26:35
+            var dados = dateString.split("T");
+
+            var date = dados[0].split("-");
+
+            var day = parseInt(date[2]);
+            var month = parseInt(date[1]);
+            var year = parseInt(date[0]);
+
+            var time = dados[1].split(":");
+
+            var hour = parseInt(time[0]);
+            var minutes = parseInt(time[1]);
+            var seconds = parseInt(time[2]);
+
+            var format = day >= 10 ? day : '0' + day;
+            format += '/';
+            format += month >= 10 ? month : '0' + month;
+            format += '/' + year + ' ';
+            format += hour >= 10 ? hour : '0' + hour;
+            format += ':';
+            format += minutes >= 10 ? minutes : '0' + minutes;
+            format += ':';
+            format += seconds >= 10 ? seconds : '0' + seconds;
+
+            return format;
+        }
 
     </script>
 }

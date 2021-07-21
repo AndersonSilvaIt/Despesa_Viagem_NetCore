@@ -27,9 +27,6 @@ namespace DespViagem.UI.Configuration
 							 .AllowAnyMethod()
 							 .AllowAnyHeader());
 			});
-
-			//services.AddControllersWithViews();
-			//services.Configure<AppSettings>(configuration);
 		}
 
 		public static void UseMvcConfiguration(this IApplicationBuilder app, IHostEnvironment env)
@@ -44,8 +41,6 @@ namespace DespViagem.UI.Configuration
 				app.UseHsts();
 			}
 
-			//app.UseExceptionHandler("/erro/500");
-			//app.UseStatusCodePagesWithRedirects("/erro/{0}");
 			app.UseHsts();
 
 			app.UseHttpsRedirection();
@@ -65,8 +60,6 @@ namespace DespViagem.UI.Configuration
 				SupportedCultures = supportedCultures,
 				SupportedUICultures = supportedCultures
 			});
-
-			//app.UseMiddleware<ExceptionMiddleware>();
 
 			app.UseEndpoints(endpoints =>
 			{

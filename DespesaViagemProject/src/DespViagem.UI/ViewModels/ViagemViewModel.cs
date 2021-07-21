@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DespViagem.UI.ViewModels
 {
@@ -24,5 +25,9 @@ namespace DespViagem.UI.ViewModels
 		public EnderecoViewModel Endereco { get; set; }
 
 		public List<DespesaViewModel> Despesas { get; set; } = new List<DespesaViewModel>();
+
+		[NotMapped]
+		[JsonIgnore]
+		public string JsonList { get; set; }
 	}
 }

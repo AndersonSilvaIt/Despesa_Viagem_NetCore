@@ -14,38 +14,8 @@ namespace DespViagem.UI.Configuration
 		public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services,
 									IConfiguration configuration)
 		{
-			////services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			////	.AddCookie(options =>
-			////	{
-			////		options.LoginPath = "/login"; // se não estiver logado, será redirecionado para a rota /login
-			////		options.AccessDeniedPath = "/acesso-negado"; // se tiver o acesso negado
-			////	});
-			//
-			//services.AddDbContext<ApplicationDbContext>(options =>
-			//		options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-			//
-			//
-			//services.AddDefaultIdentity<IdentityUser>()
-			//	.AddRoles<IdentityRole>()
-			//	.AddErrorDescriber<IdentityMensagemPortugues>()
-			//	.AddEntityFrameworkStores<ApplicationDbContext>()
-			//	.AddDefaultTokenProviders();
-			//
-			//services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			//	.AddCookie(options =>
-			//	{
-			//		options.LoginPath = "/login"; // se não estiver logado, será redirecionado para a rota /login
-			//		options.AccessDeniedPath = "/acesso-negado"; // se tiver o acesso negado
-			//	});
-
-			//services.AddJwtConfiguration(configuration);
-
 			services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
-			//services.AddIdentity<ApplicationUser, IdentityRole>()
-			//	.AddEntityFrameworkStores<ApplicationDbContext>()
-			//	.AddDefaultTokenProviders();
 
 			services.AddDefaultIdentity<IdentityUser>()
 				.AddRoles<IdentityRole>()
@@ -77,11 +47,7 @@ namespace DespViagem.UI.Configuration
 				// Cookie settings
 				options.Cookie.HttpOnly = true;
 				options.ExpireTimeSpan = TimeSpan.FromDays(150);
-				// If the LoginPath isn't set, ASP.NET Core defaults 
-				// the path to /Account/Login.
 				options.LoginPath = "/login";
-				// If the AccessDeniedPath isn't set, ASP.NET Core defaults 
-				// the path to /Account/AccessDenied.
 				options.AccessDeniedPath = "/Account/AccessDenied";
 				options.SlidingExpiration = true;
 			});
@@ -94,6 +60,5 @@ namespace DespViagem.UI.Configuration
 			app.UseAuthentication();
 			app.UseAuthorization();
 		}
-
 	}
 }

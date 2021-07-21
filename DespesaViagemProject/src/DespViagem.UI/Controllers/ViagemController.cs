@@ -36,7 +36,6 @@ namespace DespViagem.UI.Controllers
             return View("Index", viagens);
         }
 
-        //[AllowAnonymous]
         [Route("dados-da-viagem/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -50,18 +49,24 @@ namespace DespViagem.UI.Controllers
             return View(viagemViewModel);
         }
 
-        //[ClaimsAuthorize("viagem", "Adicionar")]
+        public IActionResult Start()
+        {
+            TempData["ViagemCache"] = null;
+
+            return View("Create");
+        }
+
         [Route("nova-viagem")]
         public IActionResult Create()
         {
-            return View();
+            ViagemViewModel viagemViewModel = TratarCacheViagemViewModel();
+
+
+            return View(viagemViewModel);
         }
 
-
-        //[ClaimsAuthorize("Fornecedor", "Adicionar")]
         [Route("nova-viagem")]
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ViagemViewModel viagemViewModel)
         {
             if (!ModelState.IsValid) return View(viagemViewModel);
@@ -76,7 +81,6 @@ namespace DespViagem.UI.Controllers
             return RedirectToAction("Index");
         }
 
-        //[ClaimsAuthorize("Fornecedor", "Editar")]
         [Route("editar-fornecedor/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -88,10 +92,8 @@ namespace DespViagem.UI.Controllers
             return View(fornecedorViewModel);
         }
 
-        //[ClaimsAuthorize("Fornecedor", "Editar")]
         [Route("editar-viagem/{id:guid}")]
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, ViagemViewModel fornecedorViewModel)
         {
             if (id != fornecedorViewModel.Id) return NotFound();
@@ -107,7 +109,6 @@ namespace DespViagem.UI.Controllers
             return RedirectToAction("Index");
         }
 
-        //[ClaimsAuthorize("Fornecedor", "Excluir")]
         [Route("excluir-viagem/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -118,10 +119,8 @@ namespace DespViagem.UI.Controllers
             return View(viagemViewModel);
         }
 
-        //[ClaimsAuthorize("Fornecedor", "Excluir")]
         [Route("excluir-viagem/{id:guid}")]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var viagemViewModel = await ObterViagemEndereco(id);
@@ -136,8 +135,6 @@ namespace DespViagem.UI.Controllers
             return RedirectToAction("Index");
         }
 
-        //[AllowAnonymous]
-        //[Route("obter-endereco-fornecedor/{id:guid}")]
         public async Task<IActionResult> ObterEndereco(Guid id)
         {
             var viagem = await ObterViagemEndereco(id);
@@ -147,8 +144,6 @@ namespace DespViagem.UI.Controllers
             return PartialView("_DetalhesEndereco", viagem); // ele vai atualizar somente a partial view _DetalhesEndereco que está no edit
         }
 
-        //[ClaimsAuthorize("Fornecedor", "Atualizar")]
-        //[Route("atualizar-endereco-fornecedor/{id:guid}")]
         public async Task<IActionResult> AtualizarEndereco(Guid id)
         {
             var viagem = await ObterViagemEndereco(id);
@@ -159,10 +154,7 @@ namespace DespViagem.UI.Controllers
             return PartialView("_AtualizarEndereco", new ViagemViewModel { Endereco = viagem.Endereco });
         }
 
-        //[ClaimsAuthorize("Fornecedor", "Atualizar")]
-        //[Route("atualizar-endereco-fornecedor/{id:guid}")]
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> AtualizarEndereco(ViagemViewModel viagemViewModel)
         {
             ModelState.Remove("Cliente");
@@ -180,8 +172,6 @@ namespace DespViagem.UI.Controllers
             return Json(new { success = true, url });
         }
 
-        //[ClaimsAuthorize("Fornecedor", "Atualizar")]
-        //[Route("atualizar-endereco-fornecedor/{id:guid}")]
         public IActionResult AdicionarDespesa()
         {
             var result = new ViagemViewModel() { Despesa = new DespesaViewModel() };
@@ -189,10 +179,7 @@ namespace DespViagem.UI.Controllers
             return PartialView("_AdicionarDespesa", result);
         }
 
-        //[ClaimsAuthorize("Fornecedor", "Atualizar")]
-        //[Route("atualizar-endereco-fornecedor/{id:guid}")]
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> AdicionarDespesa(ViagemViewModel viagemViewModel)
         {
             ModelState.Remove("Cliente");
@@ -201,47 +188,95 @@ namespace DespViagem.UI.Controllers
             ModelState.Remove("ViagemId");
             ModelState.Remove("Despesa.Id");
             ModelState.Remove("Despesa.ViagemId");
+            List<DespesaViewModel> listaCache = new List<DespesaViewModel>();
+            if(viagemViewModel.JsonList != null)
+                listaCache = DeserializarObjetoResponse<List<DespesaViewModel>>(viagemViewModel.JsonList);
 
             if (!ModelState.IsValid)
                 return PartialView("_AdicionarDespesa", viagemViewModel);
 
             _viagemService.PreAdicionar(_mapper.Map<Despesa>(viagemViewModel.Despesa));
 
+            var dtNow = DateTime.Now;
+            var data = viagemViewModel.Despesa.DataCadastro;
+            var dataDespesa = new DateTime(data.Year, data.Month, data.Day, dtNow.Hour, dtNow.Minute, dtNow.Second);
+            
+            viagemViewModel.Despesa.DataCadastro = dataDespesa;
+
             if (!OperacaoValida())
                 return PartialView("_AdicionarDespesa", viagemViewModel);
 
-            viagemViewModel.Despesas = TratarCacheListaDespesa();
-
+            //viagemViewModel.Despesas = TratarCacheListaDespesa();
+            viagemViewModel.Despesas.AddRange(listaCache);
             viagemViewModel.Despesas.Add(viagemViewModel.Despesa);
 
             TratarCacheListaDespesa(viagemViewModel.Despesas);
 
             TratarCacheViagemViewModel(viagemViewModel);
 
+            //var listaDespesa = JsonSerializer.Deserialize<List<DespesaViewModel>>(TempData["DespesasViagem"].ToString(), null);
+            
+            var serialize = JsonSerializer.Serialize(viagemViewModel.Despesas, null);
+            
+            var dataSerialize = serialize;
+            //var url = "";
             var url = Url.Action("ObterDespesas", "Viagem");
-            return Json(new { success = true, url });
+            return Json(new { success = true, url, data = dataSerialize });
         }
 
         [HttpGet()]
-        public IActionResult AtualizarDespesa(Guid Id)
+        public IActionResult AtualizarDespesaGet(Guid id, string descricao)
         {
             List<DespesaViewModel> listaDespesa = TratarCacheListaDespesa();
 
-            DespesaViewModel despesaAtualizar = listaDespesa.First(x => x.Id == Id);
+            var viagemCache = TratarCacheViagemViewModel();
 
-            var result = new ViagemViewModel() { Despesa = despesaAtualizar };
+            DespesaViewModel despesaAtualizar = listaDespesa.First(x => x.Id == id);
 
-            return PartialView("_AdicionarDespesa", result);
+            viagemCache.Despesa = new DespesaViewModel
+            {
+                Id = id,
+                Descricao = descricao,
+                DataCadastro = despesaAtualizar.DataCadastro,
+                Local = despesaAtualizar.Local,
+                Valor = despesaAtualizar.Valor,
+                Observacao = despesaAtualizar.Observacao
+            };
+
+            return PartialView("_AtualizarDespesa", viagemCache);
         }
 
-        //[ClaimsAuthorize("viagem", "Adicionar")]
-        //[Route("nova-viagem-02")]
-        public IActionResult ObterDespesas()
+        [HttpPost()]
+        public IActionResult AtualizarDespesa(ViagemViewModel viagemViewModel)
         {
-            var lista = TratarCacheListaDespesa();
+            List<DespesaViewModel> listaDespesa = TratarCacheListaDespesa();
+            var viagemCache = TratarCacheViagemViewModel();
+            
+            DespesaViewModel despesaAtualizar = viagemCache.Despesas.First(x => x.Id == viagemViewModel.Despesa.Id);
 
-            return PartialView("_ListaDespesa", lista);
+            var dtNow = DateTime.Now;
+            var data = viagemViewModel.Despesa.DataCadastro;
+            var dataDespesa = new DateTime(data.Year, data.Month, data.Day, 
+                viagemCache.Despesa.DataCadastro.Hour, 
+                viagemCache.Despesa.DataCadastro.Minute, 
+                viagemCache.Despesa.DataCadastro.Second);
+
+            despesaAtualizar.Descricao = viagemViewModel.Despesa.Descricao;
+
+            despesaAtualizar.DataCadastro = dataDespesa;
+
+            despesaAtualizar.Local = viagemViewModel.Despesa.Local;
+            despesaAtualizar.Observacao = viagemViewModel.Despesa.Observacao;
+            despesaAtualizar.Valor = viagemViewModel.Despesa.Valor;
+
+            var serialize = JsonSerializer.Serialize(viagemCache.Despesas, null);
+
+            var dataSerialize = serialize;
+            //var url = "";
+            var url = Url.Action("ObterDespesas", "Viagem");
+            return Json(new { success = true, url, data = dataSerialize });
         }
+
         private async Task<ViagemViewModel> ObterViagemEndereco(Guid id)
         {
             return _mapper.Map<ViagemViewModel>(await _viagemRepository.ObterViagemEndereco(id));
@@ -281,25 +316,24 @@ namespace DespViagem.UI.Controllers
             ViagemViewModel viagem = new ViagemViewModel();
             try
             {
-                if (viagem != null)
+                if (viagemCache != null)
                 {
-                    var serialize = JsonSerializer.Serialize(viagem, null);
+                    var serialize = JsonSerializer.Serialize(viagemCache, null);
 
                     TempData["ViagemCache"] = serialize;
                     viagem = viagemCache;
                 }
-                else if (TempData["DespesasViagem"] != null)
+                else if (TempData["ViagemCache"] != null)
                 {
                     viagem = JsonSerializer.Deserialize<ViagemViewModel>(TempData["ViagemCache"].ToString(), null);
 
                     var serialize = JsonSerializer.Serialize(viagem, null);
-                    TempData["DespesasViagem"] = serialize;
+                    TempData["ViagemCache"] = serialize;
                 }
             }
             catch (Exception ex) { }
 
             return viagem;
         }
-
     }
 }

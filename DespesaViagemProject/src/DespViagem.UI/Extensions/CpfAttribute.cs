@@ -11,7 +11,6 @@ namespace DespViagem.UI.Extensions
 	{
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
-			//return new ValidationResult("OK");
 			return CPF.Validar(value.ToString()) ? ValidationResult.Success : new ValidationResult("CPF em formato Inválido");
 		}
 	}

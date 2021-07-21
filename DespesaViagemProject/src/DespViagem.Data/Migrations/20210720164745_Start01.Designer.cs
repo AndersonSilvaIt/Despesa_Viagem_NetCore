@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DespViagem.Data.Migrations
 {
     [DbContext(typeof(ViagemContext))]
-    [Migration("20201208190205_MigrationViagem01")]
-    partial class MigrationViagem01
+    [Migration("20210720164745_Start01")]
+    partial class Start01
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

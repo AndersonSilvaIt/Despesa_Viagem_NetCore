@@ -1,11 +1,12 @@
 ﻿function AjaxModal(target) {
-	alert(target);
+	
 	$(document).ready(function () {
 		$(function () {
 			$.ajaxSetup({ cache: false });
 
 			$("a[data-modal]").on("click",
 				function (e) {
+					alert(this.href);
 					$('#myModalContent').load(this.href,
 						function () {
 							$('#myModal').modal({
@@ -28,7 +29,10 @@
 					success: function (result) {
 						if (result.success) {
 							$('#myModal').modal('hide');
-							$('#' + target).load(result.url); // Carrega o resultado HTML para a div demarcada
+
+							if (result.url != null && result.url != undefined && result.url.length > 0)
+								$('#' + target).load(result.url); // Carrega o resultado HTML para a div demarcada
+
 						} else {
 							$('#myModalContent').html(result);
 							bindForm(dialog);
