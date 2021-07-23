@@ -11,6 +11,12 @@ a.navbar-brand {
 a {
     color: #0366d6;
 }
+#content {
+    width: 100%;
+    padding: 0px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
 
 .btn-primary {
     color: #fff;
@@ -125,4 +131,14 @@ a.btn, button.btn {
     cursor: pointer;
     /*font: normal 20px 'Bahnschrift', Segoe UI, Verdana, Arial, Helvetica, sans-serif;*/
     color: #000;
+}
+
+.inputMiddle {
+    line-height: 20pt;
+    height: 20pt;
+}
+
+.labelMiddle {
+    margin-bottom: 0;
+    font-size: 10pt;
 }

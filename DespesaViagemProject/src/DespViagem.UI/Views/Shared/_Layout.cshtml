@@ -6,40 +6,101 @@
     <title>@ViewData["Title"] - DespViagem.UI</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/sideBar.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <!-- Boxiocns CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     @RenderSection("Styles", required: false)
 </head>
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Despesas Viagem</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Viagem" asp-action="Index">Viagens</a>
-                        </li>
-                    </ul>
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bx-menu' style="color: white;"></i>
+            <span class="logo_name">Pw.net</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="#">
+                    <i class="fas fa-home"></i>
+                    <span class="link_name">Inicio</span>
+                </a>
+            </li>
+            <li>
+                <div class="iocn-link">
+                    <a href="#">
+                        <i class='bx bx-user'></i>
+                        <span class="link_name">Básico</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow'></i>
                 </div>
+                <ul class="sub-menu">
+                    <li><a asp-controller="Viagem" asp-action="Index">Viagens</a></li>
+                    <li><a href="#">Compania</a></li>
+                    <li><a href="#">Idioma</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="iocn-link">
+                    <a href="#">
+                        <i class='bx bx-cog'></i>
+                        <span class="link_name">Processo</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a href="#">Centro de Trabalho</a></li>
+                    <li><a href="#">Unidade de medida</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <div class="iocn-link">
+                    <a href="#">
+                        <i class="fas fa-tools"></i>
+                        <span class="link_name">Produção</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a href="#">UI Face</a></li>
+                    <li><a href="#">Pigments</a></li>
+                    <li><a href="#">Box Icons</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class='bx bx-history'></i>
+                    <span class="link_name">History</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="#">History</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="profile-details">
+                    <div class="profile-content">
+
+                    </div>
+                    <div class="name-job">
+                        <div class="profile_name">Sair</div>
+                    </div>
+                    <i class='bx bx-log-out'></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="content" style="padding-left: 18%">
+
+        <div class="tab-content" style="padding: 0 20px 20px 20px;">
+            <div class="container" style="padding-top: 10px;">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
             </div>
-        </nav>
-    </header>
-
-
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
     @* Modal para todas as telas do sistema **@
@@ -50,6 +111,35 @@
             </div>
         </div>
     </div>
+
+    <script>
+
+        let arrow = document.querySelectorAll(".arrow");
+        for (var i = 0; i < arrow.length; i++) {
+            arrow[i].addEventListener("click", (e) => {
+                let arrowParent = e.target.parentElement.parentElement;
+                arrowParent.classList.toggle("showMenu");
+            });
+        }
+
+        let sidebar = document.querySelector(".sidebar");
+        let sidebarBtn = document.querySelector(".bx-menu");
+        var expand = 0;
+        sidebarBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("close");
+
+            if (expand == 0) {
+                expand = 1;
+                $("#content").css({ "padding-left": "0%" });
+            } else {
+                expand = 0;
+                $("#content").css({ "padding-left": "18%" });
+            }
+            console.log(expand);
+            console.log(sidebarBtn);
+
+        });
+    </script>
 
     <footer class="border-top footer text-muted">
         <div class="container">

@@ -26,10 +26,6 @@ namespace DespViagem.Business.Validations
 			RuleFor(c => c.Estado)
 				.NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido")
 				.Length(2, 50).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres.");
-
-			RuleFor(c => c.Numero)
-				.NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido")
-				.Length(2, 50).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres.");
 		}
 	}
 }
