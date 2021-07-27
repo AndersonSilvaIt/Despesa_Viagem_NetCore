@@ -37,6 +37,28 @@ namespace DespViagem.UI.Controllers
 			return View();
 		}
 
+		[HttpGet]
+		[Route("cria-admin")]
+		public async Task<IActionResult> CriaAdmin()
+		{
+			var user = new IdentityUser
+			{
+				UserName = "admin@gmail.com",
+				Email = "admin@gmail.com",
+				EmailConfirmed = true
+			};
+
+			var result = await _userManager.CreateAsync(user, "ABCD@1234");
+
+			if (!result.Succeeded)
+			{
+
+
+				return View();
+			}
+			return View();
+		}
+
 		[HttpPost]
 		[Route("nova-conta")]
 		public async Task<IActionResult> Registro(UsuarioRegistro usuarioRegistro)
