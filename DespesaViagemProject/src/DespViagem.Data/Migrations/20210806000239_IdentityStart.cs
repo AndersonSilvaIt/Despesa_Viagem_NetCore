@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace DespViagem.UI.Migrations
+namespace DespViagem.Data.Migrations
 {
-    public partial class Start : Migration
+    public partial class IdentityStart : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

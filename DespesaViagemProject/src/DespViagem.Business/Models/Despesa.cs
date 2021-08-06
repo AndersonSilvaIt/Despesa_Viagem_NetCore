@@ -4,7 +4,7 @@ namespace DespViagem.Business.Models
 {
 	public class Despesa : Entity
 	{
-		public Guid ViagemId { get; set; }
+		public int ViagemId { get; set; }
 		public string Descricao { get; set; }
 		public string Local { get; set; }
 		public DateTime DataDespesa { get; set; }

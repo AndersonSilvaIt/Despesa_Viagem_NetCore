@@ -37,7 +37,7 @@ namespace DespViagem.UI.Controllers
         }
 
         [Route("dados-da-viagem/{id:guid}")]
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(int id)
         {
             var viagemViewModel = await ObterViagemDespesaEndereco(id);
 
@@ -82,7 +82,7 @@ namespace DespViagem.UI.Controllers
         }
 
         [Route("editar-fornecedor/{id:guid}")]
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> Edit(int id)
         {
             var fornecedorViewModel = await ObterViagemEndereco(id);
 
@@ -94,7 +94,7 @@ namespace DespViagem.UI.Controllers
 
         [Route("editar-viagem/{id:guid}")]
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, ViagemViewModel fornecedorViewModel)
+        public async Task<IActionResult> Edit(int id, ViagemViewModel fornecedorViewModel)
         {
             if (id != fornecedorViewModel.Id) return NotFound();
 
@@ -110,7 +110,7 @@ namespace DespViagem.UI.Controllers
         }
 
         [Route("excluir-viagem/{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             var viagemViewModel = await ObterViagemEndereco(id);
 
@@ -121,7 +121,7 @@ namespace DespViagem.UI.Controllers
 
         [Route("excluir-viagem/{id:guid}")]
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var viagemViewModel = await ObterViagemEndereco(id);
 
@@ -135,7 +135,7 @@ namespace DespViagem.UI.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> ObterEndereco(Guid id)
+        public async Task<IActionResult> ObterEndereco(int id)
         {
             var viagem = await ObterViagemEndereco(id);
             if (viagem == null)
@@ -144,7 +144,7 @@ namespace DespViagem.UI.Controllers
             return PartialView("_DetalhesEndereco", viagem); // ele vai atualizar somente a partial view _DetalhesEndereco que está no edit
         }
 
-        public async Task<IActionResult> AtualizarEndereco(Guid id)
+        public async Task<IActionResult> AtualizarEndereco(int id)
         {
             var viagem = await ObterViagemEndereco(id);
             if (viagem == null)
@@ -225,7 +225,7 @@ namespace DespViagem.UI.Controllers
         }
 
         [HttpGet()]
-        public IActionResult AtualizarDespesaGet(Guid id, string descricao)
+        public IActionResult AtualizarDespesaGet(int id, string descricao)
         {
             List<DespesaViewModel> listaDespesa = TratarCacheListaDespesa();
 
@@ -277,11 +277,11 @@ namespace DespViagem.UI.Controllers
             return Json(new { success = true, url, data = dataSerialize });
         }
 
-        private async Task<ViagemViewModel> ObterViagemEndereco(Guid id)
+        private async Task<ViagemViewModel> ObterViagemEndereco(int id)
         {
             return _mapper.Map<ViagemViewModel>(await _viagemRepository.ObterViagemEndereco(id));
         }
-        private async Task<ViagemViewModel> ObterViagemDespesaEndereco(Guid id)
+        private async Task<ViagemViewModel> ObterViagemDespesaEndereco(int id)
         {
             return _mapper.Map<ViagemViewModel>(await _viagemRepository.ObterViagemEnderecoDespesa(id));
         }

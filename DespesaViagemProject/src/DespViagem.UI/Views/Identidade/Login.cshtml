@@ -1,4 +1,4 @@
-﻿@model DespViagem.UI.ViewModels.UsuarioLogin
+﻿@model DespViagem.UI.ViewModels.App.UserLogin
 
 @{
     ViewData["Title"] = "Login de usuário";
@@ -21,9 +21,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Senha"></label>
-                    <input type="password" asp-for="Senha" class="form-control" />
-                    <span asp-validation-for="Senha" class="text-danger"></span>
+                    <label asp-for="PwdLogin"></label>
+                    <input type="password" asp-for="PwdLogin" class="form-control" />
+                    <span asp-validation-for="PwdLogin" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">

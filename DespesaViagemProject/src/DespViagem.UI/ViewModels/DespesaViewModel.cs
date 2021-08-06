@@ -8,14 +8,14 @@ namespace DespViagem.UI.ViewModels
 	public class DespesaViewModel 
 	{
 		[Key]
-		public Guid Id { get; set; } = Guid.NewGuid();
+		public int Id { get; set; } 
 
 		[Required(ErrorMessage = "O campo {0} é obrigatório")]
 		[StringLength(200, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 2)]
 		[DisplayName("Descrição")]
 		public string Descricao { get; set; }
 
-		public Guid ViagemId { get; set; }
+		public int ViagemId { get; set; }
 
 		[Required(ErrorMessage = "O campo {0} é obrigatório")]
 		[StringLength(200, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 2)]

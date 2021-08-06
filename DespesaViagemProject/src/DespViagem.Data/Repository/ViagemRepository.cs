@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace DespViagem.Data.Repository
 {
-	public class ViagemRepository : Repository<Viagem>, IViagemRepository
+	public class ViagemRepository : BaseRepository<Viagem>, IViagemRepository
 	{
 		public ViagemRepository(ViagemContext contexto) : base(contexto)
 		{
 		}
 
-		public async Task<Viagem> ObterViagemEndereco(Guid id)
+		public async Task<Viagem> ObterViagemEndereco(int id)
 		{
 			// Obter a viagem junto com seu endereco
 			return await Db.Viagens.AsNoTracking()
@@ -21,7 +21,7 @@ namespace DespViagem.Data.Repository
 						.FirstOrDefaultAsync(c => c.Id == id);
 		}
 
-		public async Task<Viagem> ObterViagemEnderecoDespesa(Guid id)
+		public async Task<Viagem> ObterViagemEnderecoDespesa(int id)
 		{
 			return await Db.Viagens.AsNoTracking()
 			.Include(c => c.Despesas)

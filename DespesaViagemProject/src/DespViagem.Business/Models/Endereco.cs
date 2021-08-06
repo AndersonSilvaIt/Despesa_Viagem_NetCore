@@ -13,7 +13,7 @@ namespace DespViagem.Business.Models
 		public string Cidade { get; set; }
 		public string Estado { get; set; }
 
-		public Guid ViagemId { get; set; }
+		public int ViagemId { get; set; }
 
 		/*ER Relation*/
 		public Viagem Viagem { get; set; }

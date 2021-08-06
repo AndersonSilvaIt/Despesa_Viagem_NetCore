@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace DespViagem.Data.Repository
 {
-	public class EnderecoRepository : Repository<Endereco>, IEnderecoRepository
+	public class EnderecoRepository : BaseRepository<Endereco>, IEnderecoRepository
 	{
 		public EnderecoRepository(ViagemContext contexto) : base(contexto)
 		{
 		}
 
-		public async Task<Endereco> ObterEnderecoPorViagem(Guid viagemId)
+		public async Task<Endereco> ObterEnderecoPorViagem(int viagemId)
 		{
 			//Obtem o endereco por fornecedor
 			return await Db.Enderecos.AsNoTracking()

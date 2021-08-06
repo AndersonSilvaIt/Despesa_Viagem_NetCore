@@ -4,7 +4,7 @@ using DespViagem.Data.Contexto;
 
 namespace DespViagem.Data.Repository
 {
-	public class DespesaRepository : Repository<Despesa>, IDespesaRepository
+	public class DespesaRepository : BaseRepository<Despesa>, IDespesaRepository
 	{
 		public DespesaRepository(ViagemContext contexto) :base(contexto)
 		{

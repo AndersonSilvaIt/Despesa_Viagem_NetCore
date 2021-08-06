@@ -1,4 +1,4 @@
-﻿using DespViagem.UI.Data;
+﻿using DespViagem.Data.Contexto.IdentityContexto;
 using DespViagem.UI.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -14,13 +14,13 @@ namespace DespViagem.UI.Configuration
 		public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services,
 									IConfiguration configuration)
 		{
-			services.AddDbContext<ApplicationDbContext>(options =>
+			services.AddDbContext<AppIdentityDbContext>(options =>
 	options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
 			services.AddDefaultIdentity<IdentityUser>()
 				.AddRoles<IdentityRole>()
 				.AddErrorDescriber<IdentityMensagemPortugues>()
-				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddEntityFrameworkStores<AppIdentityDbContext>()
 				.AddDefaultTokenProviders();
 
 			services.Configure<IdentityOptions>(options =>

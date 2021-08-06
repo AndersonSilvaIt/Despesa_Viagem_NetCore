@@ -8,7 +8,7 @@ namespace DespViagem.Business.Interfaces
 	{
 		Task Adicionar(Despesa viagem);
 		Task Atualizar(Despesa viagem);
-		Task Remover(Guid id);
+		Task Remover(int id);
 		
 	}
 }

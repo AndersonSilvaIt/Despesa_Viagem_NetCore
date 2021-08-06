@@ -13,7 +13,7 @@ namespace DespViagem.Business.Services
 
 		public ViagemService(IViagemRepository fornecedorRepository,
 								 IEnderecoRepository enderecoRepository,
-								INotificador notificador) : base(notificador)
+								INotificador notificador, IUnitOfWork uow) : base(notificador, uow)
 		{
 			_viagemRepository = fornecedorRepository;
 			_enderecoRepository = enderecoRepository;
@@ -41,7 +41,7 @@ namespace DespViagem.Business.Services
 			await _enderecoRepository.Atualizar(endereco);
 		}
 
-		public async Task Remover(Guid id)
+		public async Task Remover(int id)
 		{
 			var endereco = await _enderecoRepository.ObterEnderecoPorViagem(id);
 
@@ -56,5 +56,5 @@ namespace DespViagem.Business.Services
 			if (!ExecutarValidacao(new DespesaValidation(), despesa)) return;
 		}
 
-	}
+    }
 }

@@ -1,10 +1,13 @@
-﻿using DespViagem.Business.Models;
+﻿using DespViagem.Business.Interfaces;
+using DespViagem.Business.Models;
+using DespViagem.Business.Models.Gerencial;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DespViagem.Data.Contexto
 {
-	public class ViagemContext : DbContext
+	public class ViagemContext : DbContext, IContext
 	{
 		public ViagemContext(DbContextOptions options) : base(options)
 		{ }
@@ -12,6 +15,11 @@ namespace DespViagem.Data.Contexto
 		public DbSet<Viagem> Viagens { get; set; }
 		public DbSet<Endereco> Enderecos { get; set; }
 		public DbSet<Despesa> Despesas { get; set; }
+
+		public DbSet<Tela> Tela { get; set; }
+		public DbSet<PerfilUsuario> PerfilUsuario { get; set; }
+		public DbSet<TelaFuncaoPerfilUsuario> TelaFuncaoPerfilUsuario { get; set; }
+		public DbSet<DVUser> DVUser { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -40,6 +48,13 @@ namespace DespViagem.Data.Contexto
 			optionsBuilder.EnableSensitiveDataLogging();
 
 			base.OnConfiguring(optionsBuilder);
+		}
+
+		async Task<int> IContext.SaveChangesContext()
+		{
+			int teste = await base.SaveChangesAsync();
+
+			return teste;
 		}
 	}
 }

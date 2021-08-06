@@ -11,7 +11,7 @@ namespace DespViagem.Business.Services
 		private readonly IDespesaRepository _despesaRepository;
 
 		public DespesaService(IDespesaRepository despesaRepository,
-								INotificador notificador) : base(notificador)
+								INotificador notificador, IUnitOfWork uow) : base(notificador, uow)
 		{
 			_despesaRepository = despesaRepository;
 		}
@@ -30,10 +30,10 @@ namespace DespViagem.Business.Services
 			await _despesaRepository.Atualizar(despesa);
 		}
 
-		public async Task Remover(Guid id)
+		public async Task Remover(int id)
 		{
 			await _despesaRepository.Remover(id);
 		}
 
-	}
+    }
 }

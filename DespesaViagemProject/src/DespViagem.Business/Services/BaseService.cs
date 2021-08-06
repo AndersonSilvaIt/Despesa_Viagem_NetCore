@@ -3,6 +3,7 @@ using DespViagem.Business.Interfaces;
 using DespViagem.Business.Notificacoes;
 using FluentValidation;
 using DespViagem.Business.Models;
+using System.Threading.Tasks;
 
 namespace DespViagem.Business.Services
 {
@@ -10,9 +11,17 @@ namespace DespViagem.Business.Services
 	{
 		private readonly INotificador _notificador;
 
-		public BaseService(INotificador notificador)
+		private readonly IUnitOfWork _uow;
+
+		public BaseService(INotificador notificador, IUnitOfWork uow)
 		{
-			_notificador = notificador;
+			_uow = uow;
+		    _notificador = notificador;
+		}
+
+		public async Task<bool> Commit()
+		{
+			return await _uow.Commit();
 		}
 
 		protected void Notificar(ValidationResult validationResult)

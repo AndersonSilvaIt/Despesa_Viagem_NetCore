@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DespViagem.Data.Repository
 {
-	public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity, new()
+	public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Entity, new()
 	{
 		protected readonly ViagemContext Db;
 		protected readonly DbSet<TEntity> DbSet;
-		public Repository(ViagemContext db)
+		public BaseRepository(ViagemContext db)
 		{
 			Db = db;
 			DbSet = db.Set<TEntity>();
@@ -25,7 +25,7 @@ namespace DespViagem.Data.Repository
 			return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
 		}
 
-		public virtual async Task<TEntity> ObterPorId(Guid id)
+		public virtual async Task<TEntity> ObterPorId(int id)
 		{
 			return await DbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 		}
@@ -48,7 +48,7 @@ namespace DespViagem.Data.Repository
 			await SaveChanges();
 		}
 
-		public virtual async Task Remover(Guid id)
+		public virtual async Task Remover(int id)
 		{
 			var entity = new TEntity { Id = id };
 			DbSet.Remove(entity);
