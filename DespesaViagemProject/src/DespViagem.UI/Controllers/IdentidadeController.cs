@@ -200,12 +200,12 @@ namespace DespViagem.UI.Controllers
 		{
 			var user = new IdentityUser
 			{
-				UserName = "admin@gmail.com",
-				Email = "admin@gmail.com",
-				EmailConfirmed = true
+				UserName = "admin",
+				Email = "admin@gmail.com"
+				//EmailConfirmed = true
 			};
 
-			var result = await _userManager.CreateAsync(user, "ABCD@1234");
+			var result = await _userManager.CreateAsync(user, "admin@123");
 
 			if (!result.Succeeded)
 			{
@@ -277,7 +277,7 @@ namespace DespViagem.UI.Controllers
 		{
 			if (!ModelState.IsValid) return View(usuarioLogin);
 
-			var result = await _signInManager.PasswordSignInAsync(usuarioLogin.Email, usuarioLogin.PwdLogin,
+			var result = await _signInManager.PasswordSignInAsync(usuarioLogin.Login, usuarioLogin.PwdLogin,
 				false, true);
 
 			if (!result.Succeeded)

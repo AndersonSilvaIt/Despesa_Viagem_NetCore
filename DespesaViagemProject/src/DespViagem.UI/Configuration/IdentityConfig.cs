@@ -26,12 +26,12 @@ namespace DespViagem.UI.Configuration
 			services.Configure<IdentityOptions>(options =>
 			{
 				// Password settings
-				options.Password.RequireDigit = true;
-				options.Password.RequiredLength = 8;
-				options.Password.RequireNonAlphanumeric = false;
-				options.Password.RequireUppercase = true;
+				options.Password.RequireDigit = false;
+				//options.Password.RequiredLength = 8;
+				//options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireUppercase = false;
 				options.Password.RequireLowercase = false;
-				options.Password.RequiredUniqueChars = 6;
+				//options.Password.RequiredUniqueChars = 6;
 
 				// Lockout settings
 				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
@@ -39,7 +39,7 @@ namespace DespViagem.UI.Configuration
 				options.Lockout.AllowedForNewUsers = true;
 
 				// User settings
-				options.User.RequireUniqueEmail = true;
+				//options.User.RequireUniqueEmail = true;
 			});
 
 			services.ConfigureApplicationCookie(options =>
