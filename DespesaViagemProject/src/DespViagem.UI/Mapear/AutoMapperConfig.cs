@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using DespViagem.Business.Models;
+using DespViagem.Business.Models.Gerencial;
 using DespViagem.UI.ViewModels;
+using DespViagem.UI.ViewModels.App;
 
 namespace DespViagem.UI.AutoMapper
 {
@@ -11,6 +13,9 @@ namespace DespViagem.UI.AutoMapper
 			CreateMap<Viagem, ViagemViewModel>().ReverseMap();
 			CreateMap<Endereco, EnderecoViewModel>().ReverseMap();
 			CreateMap<Despesa, DespesaViewModel>().ReverseMap();
+			CreateMap<PerfilUsuario, PerfilUsuarioVM>().ReverseMap();
+			CreateMap<DVUser, DVUserVM>().ReverseMap();
+			CreateMap<TelaFuncaoPerfilUsuario, TelaFuncaoPerfilUsuarioVM>().ReverseMap();
 		}
 	}
 }

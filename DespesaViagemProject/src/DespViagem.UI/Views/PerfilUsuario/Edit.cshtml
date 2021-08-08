@@ -1,0 +1,81 @@
+﻿@model DespViagem.UI.ViewModels.App.PerfilUsuarioVM
+
+@{
+    ViewData["Title"] = "Perful Usuário - Editar";
+    Layout = "";
+}
+
+<partial name="_partialModalDialog" />
+
+<form asp-action="Edit">
+    <div class="modal-body">
+        <input type="hidden" id="hiddenListScreens" asp-for="JsonList" />
+
+        <vc:summary></vc:summary>
+
+        <div class="form-row">
+            <div class="form-group col-md-10">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" autocomplete="off" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div style="margin-left: 2%;">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+            </label>
+        </div>
+        <br />
+        <fieldset style=" border: solid 1px blue;
+                          border-radius: 10px;
+                          padding: 0px 20px 0px 20px; margin-bottom: 20px;
+        ">
+            <legend style="padding: 0 0 0 2%; width: 15%;">Telas</legend>
+            @foreach (var item in Model.Telas)
+            {
+                <div class="form-group form-check">
+
+                    <label data-label-check style="font-weight:bold;">@item.Description</label>
+                    <input type="hidden" data-hidden-screenDescription asp-for="@item.DescriptionEN" />
+                    <input type="hidden" data-hidden-screenId asp-for="@item.IdScreen" />
+                    <input type="hidden" data-hidden-Id asp-for="@item.Id" />
+                    <input type="hidden" data-hidden-userPerfilId asp-for="@item.UserPerfilId" />
+
+                    <div style="margin-left: 70px;">
+                        <label class="form-check-label" style="width: 13%;">
+                            <input class="form-check-input" asp-for="@item.Insert" /> @Html.DisplayNameFor(model => item.Insert)
+                        </label>
+                        <label class="form-check-label" style="width: 13%;">
+                            <input class="form-check-input" asp-for="@item.Update" /> @Html.DisplayNameFor(model => item.Update)
+                        </label>
+                        <label class="form-check-label" style="width: 13%;">
+                            <input class="form-check-input" asp-for="@item.Delete" /> @Html.DisplayNameFor(model => item.Delete)
+                        </label>
+                        <label class="form-check-label" style="width: 13%;">
+                            <input class="form-check-input" asp-for="@item.View" /> @Html.DisplayNameFor(model => item.View)
+                        </label>
+                        <label class="form-check-label" style="width: 13%;">
+                            <input class="form-check-input" asp-for="@item.List" /> @Html.DisplayNameFor(model => item.List)
+                        </label>
+                        <label class="form-check-label" style="width: 13%;">
+                            <input class="form-check-input" asp-for="@item.Import" /> @Html.DisplayNameFor(model => item.Import)
+                        </label>
+                        <label class="form-check-label col-md-1">
+                            <input class="form-check-input" asp-for="@item.Export" /> @Html.DisplayNameFor(model => item.Export)
+                        </label>
+                    </div>
+                    <br />
+                </div>
+            }
+
+        </fieldset>
+
+        <div class="modal-footer">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salvar" class="btn btn-success" />
+                <input type="button" class="btn btn-info" value="Fechar" data-dismiss="modal" />
+            </div>
+        </div>
+
+    </div>
+</form>

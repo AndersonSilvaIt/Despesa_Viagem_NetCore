@@ -1,0 +1,257 @@
+﻿@model DespViagem.UI.Models.PaginatedList<DespViagem.UI.ViewModels.App.PerfilUsuarioVM>
+
+
+@{
+    ViewData["Title"] = "Perfil Usuário";
+}
+
+
+<div class="form-row">
+    <div class="form-group col-md-10">
+        <a class="btn btn-success btn-sm" asp-action="Create" data-modal="">
+            <span title="Novo" class="fa fa-plus"></span>
+        </a>
+    </div>
+    <div class="form-group col-md-1">
+        <a class="btn btn-outline-success btn-sm" asp-action="Import" data-modal-import="">
+            <span title="Importar" class="fa fa-arrow-up"></span>
+        </a>
+    </div>
+</div>
+
+<table class="table table-hover table-striped table-sm">
+    <thead class="text-light">
+        <tr>
+            <th> Descrição </th>
+            <th></th>
+        </tr>
+        <tr>&nbsp;</tr>
+    </thead>
+    <tbody class="text-sm-left">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td> @Html.DisplayFor(modelItem => item.Description) </td>
+                <td class="text-right">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm" data-modal="">
+                        <span class="fa fa-search"></span>
+                    </a>
+
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm" data-modal="">
+                        <span title="Editar" class="fa fa-pencil-alt"></span>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm dialog-delete" data-modal="">
+                        <span title="Deletar" class="fa fa-trash"></span>
+                    </a>
+                    <a class="btn btn-outline-success btn-sm" asp-route-id="@item.Id" asp-action="Export">
+                        <span title="Exportar" class="fa fa-arrow-down"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div class="divPageArrow">
+    <a id="btnPaginationLeft" data-btn-pagination asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       class="btn btn-light @prevDisabled">
+        <span title="Direita" class="fa fa-long-arrow-alt-left"></span>
+    </a>
+
+    <span class="btn btn-default">Página @(Model.PageIndex) - @(Model.TotalPages) </span>
+
+    <a id="btnPaginationRight" data-btn-pagination asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       class="btn btn-light @nextDisabled">
+        <span title="Direita" class="fa fa-long-arrow-alt-right"></span>
+    </a>
+</div>
+
+<div id="myModal" class="modal fade in">
+    <div data-modal-width="" class="modal-dialog">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+
+    <style type="text/css">
+        .modal-dialog {
+            max-width: 70%;
+        }
+    </style>
+}
+
+@section Scripts {
+    @*@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
+
+    <script>
+        var code = '';
+        var description = '';
+        var url = '';
+
+        $(document).ready(function () {
+            //AjaxModalWorkCenter("", true);
+            //AjaxModal("", false);
+            AjaxModalUserPerfil();
+
+            //AjaxModalImport("", false);
+        });
+
+        function AjaxModalUserPerfil(target, loadDiv) {
+            $(document).ready(function () {
+                $(function () {
+                    $.ajaxSetup({ cache: false });
+                    $("a[data-modal]").on("click",
+                        function (e) {
+
+                            //var hasClassDelete = $(this).hasClass("dialog-delete");
+                            //if (hasClassDelete) {
+                            //    $('div[data-modal-width]').css("max-width", "50%");
+                            //
+                            //}
+                            //else {
+                            $('div[data-modal-width]').css("max-width", "80%");
+                            //}
+
+                            $('#myModalContent').load(this.href,
+                                function () {
+                                    $('#myModal').modal({
+                                        // desabilita o clique fora do modal
+                                        backdrop: 'static',
+                                        keyboard: true
+                                    },
+                                        'show');
+
+                                    bindForm(this);
+                                });
+                            return false;
+                        });
+                });
+
+                function bindForm(dialog) {
+
+                    //$(dialog).ready(function () {
+                    //    $('#tabs').tabs();
+                    //});
+
+                    $('form', dialog).submit(function () {
+
+                        FillHiddenScreens();
+
+                        $.ajax({
+                            url: this.action,
+                            type: this.method,
+                            data: $(this).serialize(),
+                            success: function (result) {
+                                if (result.success) {
+
+                                    //console.log('Mensagem chegou01: ');
+                                    //console.log(result.msgToastrResurn);
+
+                                    $('#myModal').modal('hide');
+                                    if (loadDiv) {
+                                        //esse código, preenche uma div dentro de outra tela, exemplo, tela de cadastro que contém uma outra grid dentr dela, somente essa grid será feita o load
+                                        //$('#' + target).load(result.url); // Carrega o resultado HTML para a div demarcada
+                                    } else {
+
+                                        if (result.msgToastrResurn != undefined && result.msgToastrResurn != null) {
+                                            localStorage.setItem('msgToastr', result.msgToastrResurn);
+                                        }
+
+                                        console.log('Mensagem chegou02: ');
+                                        console.log(window.msgToastr);
+
+                                        //toastr.success('Sucesso');
+                                        window.location = result.url;
+                                        //notification('Sucesso', 3);
+                                    }
+                                    // esse código rechama a tela, por exemplo, estou inserindo alguma coisa, salvo e volto para a tela de listagem
+                                } else {
+                                    $('#myModalContent').html(result);
+                                    bindForm(dialog);
+                                }
+                            }
+                        });
+                        return false;
+                    });
+                }
+            });
+
+
+        }
+        function FillHiddenScreens() {
+            var divChecks = $(".form-check");
+            var json = '[';
+            for (var i = 0; i < divChecks.length; i++) {
+
+                var divCheck = divChecks[i];
+
+                let Description = $(divCheck).find('label[data-label-check]').text();
+                let DescriptionEN = $(divCheck).find('[data-hidden-screenDescription]').val();
+                let screenId = $(divCheck).find('[data-hidden-screenId]').val();
+                let userPerfilId = $(divCheck).find('[data-hidden-userPerfilId]').val();
+                let Id = $(divCheck).find('[data-hidden-Id]').val();
+
+                json += '{"Description":"' + Description + '", "DescriptionEN": "' + DescriptionEN + '","Id":' + Id + ', "UserPerfilId":' + userPerfilId + ', "IdScreen":' + screenId + ',';
+
+                let checkFields = $(divCheck).find('#item_Insert');
+                let isCheck = $(checkFields).is(":checked")
+                json += '"Insert":' + isCheck + ',';
+
+                checkFields = $(divCheck).find('#item_Update');
+                isCheck = $(checkFields).is(":checked")
+                json += '"Update":' + isCheck + ',';
+
+                checkFields = $(divCheck).find('#item_Delete');
+                isCheck = $(checkFields).is(":checked")
+                json += '"Delete":' + isCheck + ',';
+
+                checkFields = $(divCheck).find('#item_View');
+                isCheck = $(checkFields).is(":checked")
+                json += '"View":' + isCheck + ',';
+
+                checkFields = $(divCheck).find('#item_List');
+                isCheck = $(checkFields).is(":checked")
+                json += '"List":' + isCheck + ',';
+
+                checkFields = $(divCheck).find('#item_Import');
+                isCheck = $(checkFields).is(":checked")
+                json += '"Import":' + isCheck + ',';
+
+                checkFields = $(divCheck).find('#item_Export');
+                isCheck = $(checkFields).is(":checked")
+                json += '"Export":' + isCheck;
+
+                json += '},'
+            }
+
+            let index = json.lastIndexOf(',');
+            json = json.substring(0, index - 1);
+            //console.log(json);
+
+            json += '}]';
+
+            $("#hiddenListScreens").val(json);
+        }
+
+        function AfterLoadModal() {
+            FillHiddenScreens();
+        }
+
+            //function GetDataSerialize(object) {
+            //
+            //    var serialize = $(this).serialize();
+            //    return serialize;
+            //}
+
+    </script>
+}

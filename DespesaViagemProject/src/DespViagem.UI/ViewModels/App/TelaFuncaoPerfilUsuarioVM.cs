@@ -1,9 +1,12 @@
-﻿namespace DespViagem.UI.ViewModels.App
+﻿using System.ComponentModel;
+
+namespace DespViagem.UI.ViewModels.App
 {
     // TelaFuncaoPerfilUsuarioVM
     public class TelaFuncaoPerfilUsuarioVM
     {
         //[DisplayNamePW(nameof(Description))]
+        //[DisplayName("Teste")]
         public string Description { get; set; }
 
         public string DescriptionEN { get; set; }
